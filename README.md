@@ -6,13 +6,14 @@
 
 ## 配置
 
-> 配置文件
+> 配置文件（config.json）
 
 ```
 host => 监听服务地址
-insertText => 用于插入样式等字符
-	start => 开始文本
-	end => 结束文本
+error => 错误输出内容
+webTitle => 预览网页标题
+insertStart => 插入开始文本（支持文本文件路径）
+insertEnd => 插入结束文本（支持文本文件路径）
 ```
 
 > 配置 Nginx
@@ -32,7 +33,7 @@ location ~ \.md(.*)$ {
 
 ## 感谢
 
-> 使用到开源
+> 使用到的开源
 
 - gitee.com/xqhero/fastcgi
 - github.com/yuin/goldmark

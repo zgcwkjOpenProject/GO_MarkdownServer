@@ -1,7 +1,7 @@
 {
     "host": "127.0.0.1:9900",
-    "insertText": {
-        "start": "",
-        "end": ""
-    }
+    "error": "File not found.</br></br>by <a href='http://zgcwkj.cn'>zgcwkj</a>",
+    "webTitle": "{fileName}",
+    "insertStart": "",
+    "insertEnd": ""
 }

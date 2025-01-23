@@ -9,6 +9,8 @@ import (
 	"bytes"
 	"net/http"
 	"os"
+	"path"
+	"strings"
 )
 
 // 全局配置
@@ -19,7 +21,7 @@ func main() {
 	GlobalConfig = GetConfig()
 	FmtPrint("开源：https://github.com/zgcwkjOpenProject/GO_MarkdownServer")
 	FmtPrint("作者：zgcwkj")
-	FmtPrint("版本：20250117_001")
+	FmtPrint("版本：20250123_001")
 	FmtPrint("请尊重开源协议，保留作者信息！")
 	http.HandleFunc("/", markDownFunc)
 	server := fastcgi.NewFcgiServer(GlobalConfig.Host, nil)
@@ -39,17 +41,30 @@ func markDownFunc(writer http.ResponseWriter, request *http.Request) {
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		//log.Fatal(err)
-		outHtml := "File not found."
-		outHtml += "</br></br>"
-		outHtml += "by <a href='http://zgcwkj.cn'>zgcwkj</a>"
-		writer.Write([]byte(outHtml))
+		writer.Write([]byte("<title>File not found</title>"))
+		writer.Write([]byte(GlobalConfig.Error))
 		return
 	}
 	var buf bytes.Buffer
 	// 插入开始文本
-	start := GlobalConfig.InsertText.Start
+	start := GlobalConfig.InsertStart
 	if len(start) > 0 {
-		buf.Write([]byte(start))
+		//是路径时，读取文件
+		if strings.Contains(start, ".txt") {
+			startData, _ := os.ReadFile(start)
+			buf.Write(startData)
+		} else {
+			buf.Write([]byte(start))
+		}
+	}
+	// 插入网站标题
+	webTitle := GlobalConfig.WebTitle
+	if len(webTitle) > 0 {
+		if strings.Contains(webTitle, "{fileName}") {
+			fileName := strings.TrimSuffix(path.Base(filePath), path.Ext(filePath))
+			webTitle = strings.Replace(webTitle, "{fileName}", fileName, -1)
+		}
+		buf.Write([]byte("<title>" + webTitle + "</title>"))
 	}
 	// 解析文件
 	md := goldmark.New(
@@ -64,9 +79,15 @@ func markDownFunc(writer http.ResponseWriter, request *http.Request) {
 	)
 	md.Convert(data, &buf)
 	// 插入结束文本
-	end := GlobalConfig.InsertText.End
+	end := GlobalConfig.InsertEnd
 	if len(end) > 0 {
-		buf.Write([]byte(end))
+		//是路径时，读取文件
+		if strings.Contains(end, ".txt") {
+			endData, _ := os.ReadFile(end)
+			buf.Write(endData)
+		} else {
+			buf.Write([]byte(end))
+		}
 	}
 	// 写入响应
 	writer.Write(buf.Bytes())

@@ -9,11 +9,11 @@ import (
 
 // 配置文件
 type Config struct {
-	Host       string `json:"host"`
-	InsertText struct {
-		Start string `json:"start"`
-		End   string `json:"end"`
-	} `json:"insertText"`
+	Host        string `json:"host"`
+	Error       string `json:"error"`
+	WebTitle    string `json:"webTitle"`
+	InsertStart string `json:"insertStart"`
+	InsertEnd   string `json:"insertEnd"`
 }
 
 // 获取配置
