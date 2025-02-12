@@ -62,29 +62,5 @@ set GOOS=linux
 set GOARCH=arm64
 go build -ldflags="-w -s" -trimpath -o %outPath%_linux_arm64
 
-rem linux_mips
-set CGO_ENABLED=0
-set GOOS=linux
-set GOARCH=mips
-go build -ldflags="-w -s" -trimpath -o %outPath%_linux_mips
-
-rem linux_mipsle
-set CGO_ENABLED=0
-set GOOS=linux
-set GOARCH=mipsle
-go build -ldflags="-w -s" -trimpath -o %outPath%_linux_mipsle
-
-rem linux_mips64
-set CGO_ENABLED=0
-set GOOS=linux
-set GOARCH=mips64
-go build -ldflags="-w -s" -trimpath -o %outPath%_linux_mips64
-
-rem linux_mips64le
-set CGO_ENABLED=0
-set GOOS=linux
-set GOARCH=mips64le
-go build -ldflags="-w -s" -trimpath -o %outPath%_linux_mips64le
-
 echo build success
 pause
